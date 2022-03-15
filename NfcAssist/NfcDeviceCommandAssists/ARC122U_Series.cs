@@ -55,8 +55,6 @@ namespace NfcDeviceCommandAssists
 
 		public ARC122U_Series()
 		{
-
-
 			//키 불러오기 *************
 			this.Apdu_LoadKey 
 				= new CommandApdu(IsoCase.Case3Short, SCardProtocol.Any)

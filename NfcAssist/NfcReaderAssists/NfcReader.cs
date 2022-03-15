@@ -2,6 +2,7 @@
 using NfcDeviceCommandAssists;
 using PCSC;
 using PCSC.Iso7816;
+using PCSC.Monitoring;
 using PcscSharpAssists;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,30 @@ namespace NfcReaderAssists
 	/// </summary>
 	public class NfcReader : NfcReaderAssistsBase, IDisposable
 	{
+		#region 외부로 노출할 이벤트
+		/// <summary>
+		/// 카드 상태가 변했다.
+		/// </summary>
+		/// <param name="e"></param>
+		public delegate void StatusChangedDelegate(StatusChangeEventArgs e);
+		/// <summary>
+		/// 카드 상태가 변했다.
+		/// </summary>
+		public event StatusChangedDelegate? OnStatusChanged;
+		/// <summary>
+		/// 카드 상태가 변했음을 외부에 알림
+		/// </summary>
+		/// <param name="e"></param>
+		private void OnStatusChangedCall(StatusChangeEventArgs e)
+		{
+			if (null != this.OnStatusChanged)
+			{
+				this.OnStatusChanged(e);
+			}
+		}
+
+		#endregion
+
 		/// <summary>
 		/// 사용할 블록 지정
 		/// <para>사용할 블록은 미리 지정해놓는 것이 좋다.<br />
@@ -35,6 +60,11 @@ namespace NfcReaderAssists
 		/// 직접 테스트해보고 적절한 시간을 찾아서 넣는다,</para>
 		/// </summary>
 		public int CommandDelay { get; set; } = 500;
+
+		/// <summary>
+		/// 모니터링용 개체
+		/// </summary>
+		private ISCardMonitor? nfcMonitor;
 
 		/// <summary>
 		/// 카드 리더기를 초기화 한다.
@@ -56,6 +86,27 @@ namespace NfcReaderAssists
 		public override void Dispose()
 		{
 			base.Dispose();
+		}
+
+		public override void ReaderNameSet(string sReaderName)
+		{
+			base.ReaderNameSet(sReaderName);
+
+			//인스턴스 생성
+			IMonitorFactory monitorFactory = MonitorFactory.Instance;
+			nfcMonitor = monitorFactory.Create(SCardScope.System);
+			//이벤트 연결
+			nfcMonitor.StatusChanged -= Monitor_StatusChanged;
+			nfcMonitor.StatusChanged += Monitor_StatusChanged;
+
+
+			//모니터링 시작
+			this.nfcMonitor.Start(base.ReaderName);
+		}
+
+		private void Monitor_StatusChanged(object sender, StatusChangeEventArgs e)
+		{
+			this.OnStatusChangedCall(e);
 		}
 
 		#region 상태 정보 확인

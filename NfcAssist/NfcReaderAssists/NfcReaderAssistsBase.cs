@@ -53,7 +53,7 @@ namespace NfcReaderAssists
 		/// 사용할 리더기의 이름을 저장한다.
 		/// </summary>
 		/// <param name="sReaderName"></param>
-		public void ReaderNameSet(string sReaderName)
+		public virtual void ReaderNameSet(string sReaderName)
 		{
 			this.ReaderName = sReaderName;
 		}
