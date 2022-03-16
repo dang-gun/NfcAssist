@@ -12,7 +12,7 @@ namespace NfcDeviceCommandAssists
 	/// <summary>
 	/// ARC122U Series
 	/// </summary>
-	public class ARC122U_Series : DeviceCommandInterface
+	public class DeviceCmd_ARC122U_Series : DeviceCommandInterface
 	{
 		/// <summary>
 		/// 외부로 노출시킬 제목
@@ -53,7 +53,7 @@ namespace NfcDeviceCommandAssists
 		/// </summary>
 		public CommandApdu Apdu_UpdateBinaryBlocks { get; set; }
 
-		public ARC122U_Series()
+		public DeviceCmd_ARC122U_Series()
 		{
 			//키 불러오기 *************
 			this.Apdu_LoadKey 

@@ -23,7 +23,7 @@ namespace NfcReaderAssists
 		/// 카드 상태가 변했다.
 		/// </summary>
 		/// <param name="e"></param>
-		public delegate void StatusChangedDelegate(StatusChangeEventArgs e);
+		public delegate void StatusChangedDelegate(NfcReader sender, StatusChangeEventArgs e);
 		/// <summary>
 		/// 카드 상태가 변했다.
 		/// </summary>
@@ -36,10 +36,32 @@ namespace NfcReaderAssists
 		{
 			if (null != this.OnStatusChanged)
 			{
-				this.OnStatusChanged(e);
+				this.OnStatusChanged(this, e);
 			}
 		}
 
+
+		/// <summary>
+		/// 들어고/나가고 상태가 변함
+		/// </summary>
+		/// <param name="e"></param>
+		public delegate void CardInOutChangedDelegate(NfcReader sender, bool bCardIn);
+		/// <summary>
+		/// 들어고/나가고 상태가 변했을때 발생하는 이벤트<br />
+		/// 카드가 들어가거나 나갔을때 발생한다.
+		/// </summary>
+		public event CardInOutChangedDelegate? OnCardInOutChanged;
+		/// <summary>
+		/// 들어고/나가고 상태가 변했음을 외부에 알림
+		/// </summary>
+		/// <param name="e"></param>
+		private void OnCardInOutChangedCall(bool bCardIn)
+		{
+			if (null != this.OnCardInOutChanged)
+			{
+				this.OnCardInOutChanged(this, bCardIn);
+			}
+		}
 		#endregion
 
 		/// <summary>
@@ -65,6 +87,13 @@ namespace NfcReaderAssists
 		/// 모니터링용 개체
 		/// </summary>
 		private ISCardMonitor? nfcMonitor;
+
+		/// <summary>
+		/// 카드가 들어있는여부<br />
+		/// 내부용으로 카드가 들어있는 이벤트가 여러번 오기 때문에
+		/// 한번만 처리하기위한 용도로만 쓰인다.
+		/// </summary>
+		private bool m_bCardIn = false;
 
 		/// <summary>
 		/// 카드 리더기를 초기화 한다.
@@ -104,9 +133,31 @@ namespace NfcReaderAssists
 			this.nfcMonitor.Start(base.ReaderName);
 		}
 
+		/// <summary>
+		/// 상태 변경 알림
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Monitor_StatusChanged(object sender, StatusChangeEventArgs e)
 		{
 			this.OnStatusChangedCall(e);
+
+			if (true == e.NewState.HasFlag(SCRState.Present))
+			{
+				if (false == this.m_bCardIn)
+				{
+					this.m_bCardIn = true;
+					//카드 들어옴 이벤트 알림
+					this.OnCardInOutChangedCall(true);
+				}
+			}
+			else if (e.NewState.HasFlag(SCRState.Empty))
+			{
+				m_bCardIn = false;
+				//카드 들어옴 이벤트 알림
+				this.OnCardInOutChangedCall(false);
+			}
+
 		}
 
 		#region 상태 정보 확인

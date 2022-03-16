@@ -10,7 +10,7 @@ namespace NfcCardInfo
 	/// Mifare1k 카드의 
 	/// https://www.acs.com.hk/en/products/3/acr122u-usb-nfc-reader/
 	/// </summary>
-	public class Mifare1k : CardInfoInterface
+	public class CardInfo_Mifare1k : CardInfoInterface
 	{
 		/// <summary>
 		/// 외부로 노출시킬 제목

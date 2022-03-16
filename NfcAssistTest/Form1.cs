@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -36,23 +37,23 @@ namespace NfcAssistTest
 			InitializeComponent();
 
 			//장비를 기본값으로 설정한다.**************
+			//여기서는 리스트뷰의 셀랙트가 동작하므로 더미만 만들어 둔다.
 			this.m_nfc
 				= new NfcReader(
-						new ARC122U_Series()
-						, new Mifare1k());
-			//
+						new DeviceCmd_Dummy()
+						, new CardInfo_Dummy());
 			this.m_nfcTest
 				= new NfcReaderTest(
-						new ARC122U_Series()
-						, new Mifare1k());
+						new DeviceCmd_Dummy()
+						, new CardInfo_Dummy());
 
 
 			//가지고 있는 정보를 UI에 표시한다.
 			//디바이스 ◇◇◇◇
-			listviewDevice.Items.Add(new ARC122U_Series().Title);
+			listviewDevice.Items.Add(new DeviceCmd_ARC122U_Series().Title);
 			listviewDevice.Items[0].Selected = true;
 			//카드 ◇◇◇◇
-			listviewCard.Items.Add(new Mifare1k().Title);
+			listviewCard.Items.Add(new CardInfo_Mifare1k().Title);
 			listviewCard.Items[0].Selected = true;
 
 
@@ -60,6 +61,7 @@ namespace NfcAssistTest
 			monitorFactory = MonitorFactory.Instance;
 			monitor = monitorFactory.Create(SCardScope.System);
 			//이벤트 연결
+			monitor.StatusChanged -= Monitor_StatusChanged;
 			monitor.StatusChanged += Monitor_StatusChanged;
 
 			//카드 리스트 새로고침
@@ -92,9 +94,11 @@ namespace NfcAssistTest
 			{//같은 쓰래드다.
 				this.LogAddNotInvoke(sMessage);
 			}
-
 		}
-
+		/// <summary>
+		/// 로그 추가(인보크 없음)
+		/// </summary>
+		/// <param name="sMessage"></param>
 		private void LogAddNotInvoke(string sMessage)
 		{
 			ListViewItem item = new ListViewItem();
@@ -105,6 +109,33 @@ namespace NfcAssistTest
 			this.listLog.Items[this.listLog.Items.Count - 1].EnsureVisible();
 		}
 
+		/// <summary>
+		/// 정보 레이블 설정
+		/// </summary>
+		/// <param name="sText"></param>
+		private void InfoLable(string sText)
+		{
+			if (true == InvokeRequired)
+			{//다른 쓰래드다.
+				this.Invoke(new Action(
+					delegate ()
+					{
+						this.InfoLableNotInvoke(sText);
+					}));
+			}
+			else
+			{//같은 쓰래드다.
+				this.InfoLableNotInvoke(sText);
+			}
+		}
+		/// <summary>
+		/// 정보 레이블 설정(인보크 없음)
+		/// </summary>
+		/// <param name="sMessage"></param>
+		private void InfoLableNotInvoke(string sMessage)
+		{
+			labInfo.Text = sMessage;
+		}
 
 		#endregion
 
@@ -139,18 +170,18 @@ namespace NfcAssistTest
 				string sDeviceTitle = this.listviewDevice.SelectedItems[0].Text;
 				DeviceCommandInterface? selectDeviceCmd = null;
 
-				if (new ARC122U_Series().Title == sDeviceTitle)
+				if (new DeviceCmd_ARC122U_Series().Title == sDeviceTitle)
 				{
-					selectDeviceCmd = new ARC122U_Series();
+					selectDeviceCmd = new DeviceCmd_ARC122U_Series();
 				}
 
 				//카드 판단 *************
 				string sCardTitle = this.listviewCard.SelectedItems[0].Text;
 				CardInfoInterface? selectCardInfo = null;
 
-				if (new Mifare1k().Title == sCardTitle)
+				if (new CardInfo_Mifare1k().Title == sCardTitle)
 				{
-					selectCardInfo = new Mifare1k();
+					selectCardInfo = new CardInfo_Mifare1k();
 				}
 
 				if (null == selectDeviceCmd)
@@ -172,7 +203,24 @@ namespace NfcAssistTest
 						= new NfcReaderTest(
 								selectDeviceCmd
 								, selectCardInfo);
+
+					this.m_nfc.OnCardInOutChanged -= M_nfc_OnCardInOutChanged;
+					this.m_nfc.OnCardInOutChanged += M_nfc_OnCardInOutChanged;
 				}
+			}
+		}
+
+		private void M_nfc_OnCardInOutChanged(NfcReader sender, bool bCardIn)
+		{
+			if (true == bCardIn)
+			{
+				this.InfoLable("Card In");
+				Debug.WriteLine("Card In");
+			}
+			else
+			{
+				this.InfoLable("Card Out");
+				Debug.WriteLine("Card Out");
 			}
 		}
 		#endregion
