@@ -109,32 +109,41 @@ namespace NfcAssistTest
 			this.listLog.Items[this.listLog.Items.Count - 1].EnsureVisible();
 		}
 
+		private void InfoLable(string sText)
+		{
+			this.InfoLable(sText, null);
+		}
 		/// <summary>
 		/// 정보 레이블 설정
 		/// </summary>
 		/// <param name="sText"></param>
-		private void InfoLable(string sText)
+		private void InfoLable(string sText, Color? color)
 		{
 			if (true == InvokeRequired)
 			{//다른 쓰래드다.
 				this.Invoke(new Action(
 					delegate ()
 					{
-						this.InfoLableNotInvoke(sText);
+						this.InfoLableNotInvoke(sText, color);
 					}));
 			}
 			else
 			{//같은 쓰래드다.
-				this.InfoLableNotInvoke(sText);
+				this.InfoLableNotInvoke(sText, color);
 			}
 		}
 		/// <summary>
 		/// 정보 레이블 설정(인보크 없음)
 		/// </summary>
 		/// <param name="sMessage"></param>
-		private void InfoLableNotInvoke(string sMessage)
+		private void InfoLableNotInvoke(string sMessage, Color? color)
 		{
 			labInfo.Text = sMessage;
+			if (null != color)
+			{
+				labInfo.BackColor = (Color)color;
+			}
+			
 		}
 
 		#endregion
@@ -214,12 +223,12 @@ namespace NfcAssistTest
 		{
 			if (true == bCardIn)
 			{
-				this.InfoLable("Card In");
+				this.InfoLable("Card In", Color.SkyBlue);
 				Debug.WriteLine("Card In");
 			}
 			else
 			{
-				this.InfoLable("Card Out");
+				this.InfoLable("Card Out", Color.White);
 				Debug.WriteLine("Card Out");
 			}
 		}
@@ -312,7 +321,7 @@ namespace NfcAssistTest
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void btnAuthBlock_Click(object sender, EventArgs e)
+		private void btnAuthBlock_Click(object? sender, EventArgs? e)
 		{
 			byte byteBlockNumber = this.BlockNumberGet();
 
@@ -322,15 +331,15 @@ namespace NfcAssistTest
 				{
 					this.LogAdd(String.Format("블록 권한 얻기 성공 : {0:X2}", byteBlockNumber));
 
-					this.labInfo.Text = "Authentication : success";
-					this.labInfo.BackColor = Color.FromArgb(255, 80, 240, 180);
+					this.InfoLable("Authentication : success"
+									, Color.FromArgb(255, 80, 240, 180));
 					this.LogAdd(string.Format("AUTHENTICATE success."));
 				}
 				else
 				{
 					this.LogAdd(">>> 블록 권한 얻기 실패");
-					this.labInfo.Text = "Authentication : none";
-					this.labInfo.BackColor = Color.FromArgb(255, 160, 0, 184);
+					this.InfoLable("Authentication : none"
+									, Color.FromArgb(255, 160, 0, 184));
 					this.LogAdd(string.Format("- Error - Read Binary failed. - 인증을 다시 받으면 해결 될 수 있음."));
 				}
 			}

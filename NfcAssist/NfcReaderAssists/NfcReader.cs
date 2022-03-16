@@ -79,7 +79,7 @@ namespace NfcReaderAssists
 		/// 명령어를 연속으로 보낼때 간격(ms)
 		/// <para>너무 빨리명령어를 연속으로 보내면 리더기가 처리를 못할수 있으므로
 		/// 일정간격을 주고 처리하는데 쓰이는 간격이다.<br />
-		/// 직접 테스트해보고 적절한 시간을 찾아서 넣는다,</para>
+		/// 직접 테스트해보고 적절한 시간을 찾아서 넣는다.</para>
 		/// </summary>
 		public int CommandDelay { get; set; } = 500;
 
@@ -226,7 +226,7 @@ namespace NfcReaderAssists
 		public async Task<byte[]?> ReadBinary()
 		{
 			bool bSuccess = true;
-			List<byte> aa = new List<byte>();
+			List<byte> listByteReturn = new List<byte>();
 
 
 			if (true == bSuccess)
@@ -241,23 +241,44 @@ namespace NfcReaderAssists
 
 			if (true == bSuccess)
 			{
-				//각 블록에 접근한다.
-				foreach (byte itemBlock in this.UseDataBlocks)
+				try
 				{
-					//이 블록의 권한을 얻고
-					this.AuthBlock(itemBlock);
-					//데이터를 읽는다.
-					byte[] byteBinaryBlocksData;
-					this.ReadBinaryBlocks(itemBlock, out byteBinaryBlocksData);
-					aa.AddRange(byteBinaryBlocksData);
+					//각 블록에 접근한다.
+					foreach (byte itemBlock in this.UseDataBlocks)
+					{
+						//이 블록의 권한을 얻고
+						this.AuthBlock(itemBlock);
+						//데이터를 읽는다.
+						byte[] byteBinaryBlocksData;
+						this.ReadBinaryBlocks(itemBlock, out byteBinaryBlocksData);
+						listByteReturn.AddRange(byteBinaryBlocksData);
 
-					//대기
-					Task task1 = Task.Run(() => Thread.Sleep(this.CommandDelay));
-					await task1;
+						//대기
+						Task task1 = Task.Run(() => Thread.Sleep(this.CommandDelay));
+						await task1;
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("NfcReader > ReadBinary : "
+									+ Environment.NewLine
+									+ ex);
+					bSuccess = false;
+					//비워서 전달
+					listByteReturn.Clear();
 				}
 			}
 
-			return aa.ToArray();
+			if (false == bSuccess)
+			{//요청이 실패 했다.
+
+				//가끔 listByteReturn에 찌꺼기가 남아있는 현상이 있어서 방어코드
+				//테스트 더 해보고 아니면 제거해도 된다.
+				//비워서 전달
+				listByteReturn.Clear();
+			}
+
+			return listByteReturn.ToArray();
 		}
 
 
@@ -288,29 +309,41 @@ namespace NfcReaderAssists
 				//사용할 크기만큼 복사
 				this.Copy_CutAll(ref byteData, byteBinaryData);
 
-				int nOffset = 0;
+				
 
-				//각 블록에 접근한다.
-				foreach (byte itemBlock in this.UseDataBlocks)
+				try
 				{
-					//이 블록의 권한을 얻고
-					this.AuthBlock(itemBlock);
+					int nOffset = 0;
 
-					//원본 데이터에서 필요한 만큼 자른다.
-					byte[] byteTemp = new byte[this.CardInfo.BlockSize];
-					nOffset
-						= ArrayCopyOffset(
-							byteData
-							, byteTemp
-							, nOffset);
-					//해당 블록에 작성한다.
-					this.UpdateBinaryBlocks(itemBlock, byteTemp);
+					//각 블록에 접근한다.
+					foreach (byte itemBlock in this.UseDataBlocks)
+					{
+						//이 블록의 권한을 얻고
+						this.AuthBlock(itemBlock);
 
-					//대기
-					Task task1 = Task.Run(() => Thread.Sleep(this.CommandDelay));
-					await task1;
+						//원본 데이터에서 필요한 만큼 자른다.
+						byte[] byteTemp = new byte[this.CardInfo.BlockSize];
+						nOffset
+							= ArrayCopyOffset(
+								byteData
+								, byteTemp
+								, nOffset);
+						//해당 블록에 작성한다.
+						this.UpdateBinaryBlocks(itemBlock, byteTemp);
+
+						//대기
+						Task task1 = Task.Run(() => Thread.Sleep(this.CommandDelay));
+						await task1;
+					}
 				}
-			}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("NfcReader > UpdateBinary : "
+									+ Environment.NewLine
+									+ ex);
+					bSuccess = false;
+				}
+			}//end if (true == bSuccess)
 
 			return bSuccess;
 		}
