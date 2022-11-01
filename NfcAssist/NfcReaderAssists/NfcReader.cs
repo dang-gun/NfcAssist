@@ -114,23 +114,42 @@ namespace NfcReaderAssists
 		/// </summary>
 		public override void Dispose()
 		{
+			this.OnStatusChanged = null;
+			this.OnCardInOutChanged = null;
+			this.nfcMonitor = null;
+
 			base.Dispose();
 		}
 
 		public override void ReaderNameSet(string sReaderName)
 		{
-			base.ReaderNameSet(sReaderName);
+			if (null != this.nfcMonitor)
+			{//기존 내용이 있으면 
 
-			//인스턴스 생성
-			IMonitorFactory monitorFactory = MonitorFactory.Instance;
-			nfcMonitor = monitorFactory.Create(SCardScope.System);
-			//이벤트 연결
-			nfcMonitor.StatusChanged -= Monitor_StatusChanged;
-			nfcMonitor.StatusChanged += Monitor_StatusChanged;
+				nfcMonitor.StatusChanged -= Monitor_StatusChanged;
+				this.nfcMonitor.Dispose();
+				this.nfcMonitor = null;
+			}
+
+			if (string.Empty == sReaderName)
+			{//내용이 없으면 모니터링 초기화
+				this.nfcMonitor = null;
+			}
+			else
+			{
+				base.ReaderNameSet(sReaderName);
+
+				//인스턴스 생성
+				IMonitorFactory monitorFactory = MonitorFactory.Instance;
+				nfcMonitor = monitorFactory.Create(SCardScope.System);
+				//이벤트 연결
+				nfcMonitor.StatusChanged -= Monitor_StatusChanged;
+				nfcMonitor.StatusChanged += Monitor_StatusChanged;
 
 
-			//모니터링 시작
-			this.nfcMonitor.Start(base.ReaderName);
+				//모니터링 시작
+				this.nfcMonitor.Start(base.ReaderName);
+			}
 		}
 
 		/// <summary>

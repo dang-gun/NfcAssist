@@ -204,8 +204,19 @@ namespace NfcAssistTest
 				else
 				{//성공
 				 //장비 재설정
+
+					if (null != this.m_nfc)
+					{//기존 개체가 있다.
+						//this.m_nfc.OnCardInOutChanged -= M_nfc_OnCardInOutChanged;
+						this.m_nfc.Dispose();
+					}
+					if (null != this.m_nfcTest)
+					{//기존 개체가 있다.
+						this.m_nfcTest.Dispose();
+					}
+
 					this.m_nfc
-					= new NfcReader(
+						= new NfcReader(
 							selectDeviceCmd
 							, selectCardInfo);
 					this.m_nfcTest
@@ -487,6 +498,8 @@ namespace NfcAssistTest
 
 		private void comboCardList_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			this.m_nfc.ReaderNameSet(string.Empty);
+			this.m_nfcTest.ReaderNameSet(string.Empty);
 
 			this.m_nfc.ReaderNameSet(comboCardList.Text);
 			this.m_nfcTest.ReaderNameSet(comboCardList.Text);
