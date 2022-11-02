@@ -8,7 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NfcAssist\NfcAssist.csproj" />
+    <ProjectReference Include="..\NfcAssistNet4\NfcAssistNet4.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="PCSC" Version="6.0.0" />
+		<PackageReference Include="PCSC.Iso7816" Version="6.0.0" />
+		<PackageReference Include="PCSC.Reactive" Version="6.0.0" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="CardInfo\CardInfo_Mifare1k.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="DeviceCommand\DeviceCmd_ARC122U_Series.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

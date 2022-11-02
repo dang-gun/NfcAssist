@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PCSC" Version="5.1.0" />
-    <PackageReference Include="PCSC.Iso7816" Version="5.1.0" />
-    <PackageReference Include="PCSC.Reactive" Version="5.1.0" />
+    <PackageReference Include="PCSC" Version="6.0.0" />
+    <PackageReference Include="PCSC.Iso7816" Version="6.0.0" />
+    <PackageReference Include="PCSC.Reactive" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

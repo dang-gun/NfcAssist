@@ -18,10 +18,11 @@ namespace NfcCardInfo
 
 		/// <summary>
 		/// 데이터로 사용가능한 블럭 주소
-		/// <para>꼭 주소 순서대로 넣어야 한다.<br />
-		/// 그래야 특정번호를 기준으로 데이터를 읽고/쓰고 하는
-		/// 상대주소 처리가 가능하다.</para>
 		/// </summary>
+		/// <remarks>
+		/// 꼭 주소 순서대로 넣어야 한다.<br />
+		/// 그래야 특정번호를 기준으로 데이터를 읽고/쓰고 하는 상대주소 처리가 가능하다.
+		/// </remarks>
 		public byte[] DataBlocks { get; set; }
 				= new byte[] { 
 					0x00

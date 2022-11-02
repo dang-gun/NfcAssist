@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NfcAssistNet4</RootNamespace>
     <AssemblyName>NfcAssistNet4</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PCSC, Version=6.0.0.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
       <HintPath>..\packages\PCSC.6.0.0\lib\netstandard2.0\PCSC.dll</HintPath>
     </Reference>
@@ -61,10 +65,11 @@
   <ItemGroup>
     <Compile Include="NfcCardInfo\CardInfoInterface.cs" />
     <Compile Include="NfcCardInfo\CardInfo_Dummy.cs" />
-    <Compile Include="NfcCardInfo\CardInfo_Mifare1k.cs" />
-    <Compile Include="NfcDeviceCommandAssists\DeviceCmd_ARC122U_Series.cs" />
     <Compile Include="NfcDeviceCommandAssists\DeviceCmd_Dummy.cs" />
+    <Compile Include="NfcDeviceCommandAssists\DeviceCommand_ApduItemModel.cs" />
+    <Compile Include="NfcDeviceCommandAssists\DeviceCommand_JsonModel.cs" />
     <Compile Include="NfcDeviceCommandAssists\DeviceCommandInterface.cs" />
+    <Compile Include="NfcInfoFile.cs" />
     <Compile Include="NfcReaderAssists\NfcReader.cs" />
     <Compile Include="NfcReaderAssists\NfcReaderAssistsBase.cs" />
     <Compile Include="NfcReaderAssists\NfcReaderTest.cs" />

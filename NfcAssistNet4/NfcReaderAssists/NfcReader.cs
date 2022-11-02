@@ -119,6 +119,11 @@ namespace NfcReaderAssists
 
 		public override void ReaderNameSet(string sReaderName)
 		{
+			if (string.Empty == sReaderName)
+			{
+				return;
+			}
+
 			base.ReaderNameSet(sReaderName);
 
 			//인스턴스 생성

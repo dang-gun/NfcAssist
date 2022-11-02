@@ -1,4 +1,5 @@
-﻿using NfcCardInfo;
+﻿using NfcAssist;
+using NfcCardInfo;
 using NfcDeviceCommandAssists;
 using NfcReaderAssists;
 using PCSC;
@@ -12,7 +13,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -32,6 +35,17 @@ namespace NfcAssistTest
 		IMonitorFactory monitorFactory;
 		ISCardMonitor monitor;
 
+		/// <summary>
+		/// NFC 카드 리스트
+		/// </summary>
+		private List<CardInfoInterface> CardInfoList
+			= new List<CardInfoInterface>();
+		/// <summary>
+		/// 디바이스 명령 리스트
+		/// </summary>
+		private List<DeviceCommandInterface> DeviceCommandList
+			= new List<DeviceCommandInterface>();
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -48,15 +62,30 @@ namespace NfcAssistTest
 						, new CardInfo_Dummy());
 
 
+			
+			//json 파일 로드
+			NfcInfoFile nfcInfoFile = new NfcInfoFile();
+			this.CardInfoList
+				= nfcInfoFile.FolderLoad_CardInfo(@"CardInfo");
+			this.DeviceCommandList
+				= nfcInfoFile.FolderLoad_DeviceCommand(@"DeviceCommand");
+
 			//가지고 있는 정보를 UI에 표시한다.
-			//디바이스 ◇◇◇◇
-			listviewDevice.Items.Add(new DeviceCmd_ARC122U_Series().Title);
-			listviewDevice.Items[0].Selected = true;
 			//카드 ◇◇◇◇
-			listviewCard.Items.Add(new CardInfo_Mifare1k().Title);
+			foreach (CardInfoInterface itemCI in this.CardInfoList)
+			{
+				listviewCard.Items.Add(itemCI.Title);
+			}
 			listviewCard.Items[0].Selected = true;
 
+			//디바이스 ◇◇◇◇
+			foreach (DeviceCommandInterface itemDC in this.DeviceCommandList)
+			{
+				listviewDevice.Items.Add(itemDC.Title);
+			}
+			listviewDevice.Items[0].Selected = true;
 
+			
 			//인스턴스 생성
 			monitorFactory = MonitorFactory.Instance;
 			monitor = monitorFactory.Create(SCardScope.System);
@@ -177,21 +206,18 @@ namespace NfcAssistTest
 			{
 				//디바이스 판단. ****************
 				string sDeviceTitle = this.listviewDevice.SelectedItems[0].Text;
-				DeviceCommandInterface? selectDeviceCmd = null;
+				DeviceCommandInterface? selectDeviceCmd
+					= this.DeviceCommandList
+						.Where(w => w.Title == sDeviceTitle)
+						.FirstOrDefault();
 
-				if (new DeviceCmd_ARC122U_Series().Title == sDeviceTitle)
-				{
-					selectDeviceCmd = new DeviceCmd_ARC122U_Series();
-				}
-
+				
 				//카드 판단 *************
 				string sCardTitle = this.listviewCard.SelectedItems[0].Text;
-				CardInfoInterface? selectCardInfo = null;
-
-				if (new CardInfo_Mifare1k().Title == sCardTitle)
-				{
-					selectCardInfo = new CardInfo_Mifare1k();
-				}
+				CardInfoInterface? selectCardInfo
+					= this.CardInfoList
+						.Where(w => w.Title == sCardTitle)
+						.FirstOrDefault();
 
 				if (null == selectDeviceCmd)
 				{//디바이스 정보 없다.
@@ -650,5 +676,87 @@ namespace NfcAssistTest
 			return byteCut;
 		}
 
+		private void tsmiDev_Test_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		private void tsmiDev_DeviceCmdJsonSave_Click(object sender, EventArgs e)
+		{
+			NfcInfoFile nfcInfoFile
+				= new NfcInfoFile();
+
+			//nfcInfoFile.FileLoad_CardInfo(@"CardInfo\CardInfo_Mifare1k.json");
+
+
+			DeviceCommand_JsonModel temp = new DeviceCommand_JsonModel();
+
+			temp.Title = "ARC122U Series";
+			temp.KeyStructure = KeyStructure.VolatileMemory;
+
+			//키 불러오기 *************
+			temp.Apdu_LoadKey
+				= new DeviceCommand_ApduItemModel(IsoCase.Case3Short, SCardProtocol.Any)
+				{
+					CLA = 0xFF,
+					Instruction = InstructionCode.ExternalAuthenticate,
+					P1 = (byte)KeyStructure.VolatileMemory,
+					P2 = 0x00, // first key slot
+					Data = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF } // key
+				};
+
+
+			//블록 인증 *************
+			temp.GeneralAuthBlock = new GeneralAuthenticate
+			{
+				Msb = 0x00,
+				//블록 위치
+				Lsb = 0x08,
+				KeyNumber = 0x00,
+				KeyType = KeyType.KeyA
+			};
+
+			temp.Apdu_AuthBlock
+				= new DeviceCommand_ApduItemModel(IsoCase.Case3Short, SCardProtocol.Any)
+				{
+					CLA = 0xFF,
+					Instruction = InstructionCode.InternalAuthenticate,
+					P1 = 0x00,
+					P2 = 0x00,
+					Data = temp.GeneralAuthBlock.ToArray(),
+				};
+
+
+
+			//블록의 데이터를 읽는다. *************
+			temp.Apdu_ReadBinaryBlocks
+				= new DeviceCommand_ApduItemModel(IsoCase.Case2Short, SCardProtocol.Any)
+				{
+					CLA = 0xFF,
+					Instruction = InstructionCode.ReadBinary,
+					P1 = 0x00,
+					//블록 위치
+					P2 = 0x08,
+					//블록 사이즈
+					Le = 16,
+				};
+
+
+
+			//블록의 데이터를 쓴다. *************
+			temp.Apdu_UpdateBinaryBlocks
+				= new DeviceCommand_ApduItemModel(IsoCase.Case3Short, SCardProtocol.Any)
+				{
+					CLA = 0xFF,
+					Instruction = InstructionCode.UpdateBinary,
+					P1 = 0x00,
+					//블록 위치
+					P2 = 0x08,
+					//기록할 데이터
+					Data = new byte[] { 0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A, 0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00 }
+				};
+
+			nfcInfoFile.Test1(temp);
+		}
 	}
 }
