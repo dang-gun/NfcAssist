@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -71,8 +72,14 @@ namespace NfcAssistTest
 						new DeviceCmd_Dummy()
 						, new CardInfo_Dummy());
 
+			//인스턴스 생성
+			monitorFactory = MonitorFactory.Instance;
+			monitor = monitorFactory.Create(SCardScope.System);
+			//monitor = monitorFactory.Create(SCardScope.User);
+			//이벤트 연결
+			monitor.StatusChanged -= Monitor_StatusChanged;
+			monitor.StatusChanged += Monitor_StatusChanged;
 
-			
 			//json 파일 로드
 			NfcInfoFile nfcInfoFile = new NfcInfoFile();
 			this.CardInfoList
@@ -95,13 +102,6 @@ namespace NfcAssistTest
 			}
 			listviewDevice.Items[0].Selected = true;
 
-			
-			//인스턴스 생성
-			monitorFactory = MonitorFactory.Instance;
-			monitor = monitorFactory.Create(SCardScope.System);
-			//이벤트 연결
-			monitor.StatusChanged -= Monitor_StatusChanged;
-			monitor.StatusChanged += Monitor_StatusChanged;
 
 			//카드 리스트 새로고침
 			btnCardListRefresh_Click(null, null);
@@ -545,20 +545,32 @@ namespace NfcAssistTest
 
 		#endregion
 
-		private void comboCardList_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboCardReaderList_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.m_nfc.ReaderNameSet(string.Empty);
-			this.m_nfcTest.ReaderNameSet(string.Empty);
-
-			this.m_nfc.ReaderNameSet(comboCardList.Text);
-			this.m_nfcTest.ReaderNameSet(comboCardList.Text);
-
-			if (string.Empty != comboCardList.Text)
+			if (string.Empty != this.m_nfc.ReaderName)
 			{
+				//this.monitor.ReaderNames
+			}
+
+			this.m_nfc.ReaderNameSet(comboCardReaderList.Text);
+			this.m_nfcTest.ReaderNameSet(comboCardReaderList.Text);
+
+			if (string.Empty != comboCardReaderList.Text)
+			{
+				//기존 모니터링 제거
+				//monitorFactory.Release(monitor);
+				//monitor.StatusChanged -= Monitor_StatusChanged;
+				//monitor.Cancel();
+				//monitor.Dispose();
+
+				//새 모니터링 작성
+				//this.monitor = monitorFactory.Create(SCardScope.System);
 				//모니터링 시작
 				this.monitor.Start(this.m_nfc.ReaderName);
 				//리더기 정보 출력
 				//this.btnReadReaderAttr_Click(null, null);
+
+				//this.NfcInfoChanged();
 			}
 			else
 			{
@@ -606,12 +618,12 @@ namespace NfcAssistTest
 			string[] sNameList = NfcListInfo.ReaderList();
 
 			//기존 리스트를 지우고
-			comboCardList.Items.Clear();
+			comboCardReaderList.Items.Clear();
 
 			//새 리스트를 만든다.
 			foreach (string itemName in sNameList)
 			{
-				comboCardList.Items.Add(itemName);
+				comboCardReaderList.Items.Add(itemName);
 				this.LogAdd("find Reader : " + itemName);
 			}
 		}

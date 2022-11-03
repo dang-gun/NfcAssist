@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.comboCardList = new System.Windows.Forms.ComboBox();
+			this.comboCardReaderList = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnCardListRefresh = new System.Windows.Forms.Button();
 			this.listLog = new System.Windows.Forms.ListView();
@@ -75,14 +75,14 @@
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// comboCardList
+			// comboCardReaderList
 			// 
-			this.comboCardList.FormattingEnabled = true;
-			this.comboCardList.Location = new System.Drawing.Point(118, 29);
-			this.comboCardList.Name = "comboCardList";
-			this.comboCardList.Size = new System.Drawing.Size(471, 23);
-			this.comboCardList.TabIndex = 0;
-			this.comboCardList.SelectedIndexChanged += new System.EventHandler(this.comboCardList_SelectedIndexChanged);
+			this.comboCardReaderList.FormattingEnabled = true;
+			this.comboCardReaderList.Location = new System.Drawing.Point(118, 29);
+			this.comboCardReaderList.Name = "comboCardReaderList";
+			this.comboCardReaderList.Size = new System.Drawing.Size(471, 23);
+			this.comboCardReaderList.TabIndex = 0;
+			this.comboCardReaderList.SelectedIndexChanged += new System.EventHandler(this.comboCardReaderList_SelectedIndexChanged);
 			// 
 			// label1
 			// 
@@ -90,7 +90,7 @@
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "Card List";
+			this.label1.Text = "Card Reader List";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// btnCardListRefresh
@@ -456,7 +456,7 @@
 			this.Controls.Add(this.listLog);
 			this.Controls.Add(this.btnCardListRefresh);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.comboCardList);
+			this.Controls.Add(this.comboCardReaderList);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
@@ -478,7 +478,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.ComboBox comboCardList;
+		private System.Windows.Forms.ComboBox comboCardReaderList;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnCardListRefresh;
 		private System.Windows.Forms.ListView listLog;

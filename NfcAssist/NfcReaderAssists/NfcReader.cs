@@ -128,6 +128,12 @@ namespace NfcReaderAssists
 
 			//인스턴스 생성
 			IMonitorFactory monitorFactory = MonitorFactory.Instance;
+
+			//기존 연결 끊기
+			if (null != nfcMonitor)
+			{
+				monitorFactory.Release(nfcMonitor);
+			}
 			nfcMonitor = monitorFactory.Create(SCardScope.System);
 			//이벤트 연결
 			nfcMonitor.StatusChanged -= Monitor_StatusChanged;
