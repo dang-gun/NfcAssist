@@ -89,7 +89,7 @@ namespace NfcReaderAssists
 		private ISCardMonitor? nfcMonitor;
 
 		/// <summary>
-		/// 카드가 들어있는지 여부<br />
+		/// 카드가 들어있는여부<br />
 		/// 내부용으로 카드가 들어있는 이벤트가 여러번 오기 때문에
 		/// 한번만 처리하기위한 용도로만 쓰인다.
 		/// </summary>
@@ -114,42 +114,28 @@ namespace NfcReaderAssists
 		/// </summary>
 		public override void Dispose()
 		{
-			this.OnStatusChanged = null;
-			this.OnCardInOutChanged = null;
-			this.nfcMonitor = null;
-
 			base.Dispose();
 		}
 
 		public override void ReaderNameSet(string sReaderName)
 		{
-			if (null != this.nfcMonitor)
-			{//기존 내용이 있으면 
-
-				nfcMonitor.StatusChanged -= Monitor_StatusChanged;
-				this.nfcMonitor.Dispose();
-				this.nfcMonitor = null;
-			}
-
 			if (string.Empty == sReaderName)
-			{//내용이 없으면 모니터링 초기화
-				this.nfcMonitor = null;
-			}
-			else
 			{
-				base.ReaderNameSet(sReaderName);
-
-				//인스턴스 생성
-				IMonitorFactory monitorFactory = MonitorFactory.Instance;
-				nfcMonitor = monitorFactory.Create(SCardScope.System);
-				//이벤트 연결
-				nfcMonitor.StatusChanged -= Monitor_StatusChanged;
-				nfcMonitor.StatusChanged += Monitor_StatusChanged;
-
-
-				//모니터링 시작
-				this.nfcMonitor.Start(base.ReaderName);
+				return;
 			}
+
+			base.ReaderNameSet(sReaderName);
+
+			//인스턴스 생성
+			IMonitorFactory monitorFactory = MonitorFactory.Instance;
+			nfcMonitor = monitorFactory.Create(SCardScope.System);
+			//이벤트 연결
+			nfcMonitor.StatusChanged -= Monitor_StatusChanged;
+			nfcMonitor.StatusChanged += Monitor_StatusChanged;
+
+
+			//모니터링 시작
+			this.nfcMonitor.Start(base.ReaderName);
 		}
 
 		/// <summary>
@@ -185,9 +171,9 @@ namespace NfcReaderAssists
 		/// 카드의 상태정보를 받아온다.
 		/// </summary>
 		/// <returns></returns>
-		public byte[]? GetStatus()
+		public byte[] GetStatus()
 		{
-			byte[]? byteReturn = null;
+			byte[] byteReturn = new byte[0];
 
 			using (ISCardContext Context1
 						= ContextFactory.Instance.Establish(SCardScope.System))
@@ -214,9 +200,9 @@ namespace NfcReaderAssists
 		/// </summary>
 		/// <param name="typeCardAttribute">가지고올 속성 타입</param>
 		/// <returns></returns>
-		public byte[]? CardAttributeGet(SCardAttribute typeCardAttribute)
+		public byte[] CardAttributeGet(SCardAttribute typeCardAttribute)
 		{
-			byte[]? byteReturn = null;
+			byte[] byteReturn = new byte[0];
 
 			using (ISCardContext Context1
 						= ContextFactory.Instance.Establish(SCardScope.System))
@@ -242,7 +228,7 @@ namespace NfcReaderAssists
 		/// 가지고 있는 블록 리스트의 데이터를 순서대로 읽는다.
 		/// </summary>
 		/// <returns>읽어들인 데이터. null == 오류</returns>
-		public async Task<byte[]?> ReadBinary()
+		public async Task<byte[]> ReadBinary()
 		{
 			bool bSuccess = true;
 			List<byte> listByteReturn = new List<byte>();

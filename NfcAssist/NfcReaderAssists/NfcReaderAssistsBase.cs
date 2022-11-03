@@ -17,12 +17,42 @@ namespace NfcReaderAssists
 		/// <summary>
 		/// 사용할 디바이스의 정보
 		/// </summary>
-		public DeviceCommandInterface DeviceInfo { get; protected set; }
+		public DeviceCommandInterface DeviceInfo 
+		{
+			get
+			{
+				//DeviceInfo_ori가 null이면 에러
+				return this.DeviceInfo_Ori!;
+			}
+			protected set
+			{
+				this.DeviceInfo_Ori = value;
+			}
+		}
+		/// <summary>
+		/// 사용할 디바이스의 정보_원본
+		/// </summary>
+		private DeviceCommandInterface? DeviceInfo_Ori = null;
 
 		/// <summary>
 		/// 작성에 사용 할 카드의 정보
 		/// </summary>
-		public CardInfoInterface CardInfo { get; protected set; }
+		public CardInfoInterface CardInfo
+		{
+			get
+			{
+				//CardInfo_Ori null이면 에러
+				return this.CardInfo_Ori!;
+			}
+			protected set
+			{
+				this.CardInfo_Ori = value;
+			}
+		}
+		/// <summary>
+		/// 작성에 사용 할 카드의 정보 - 원본
+		/// </summary>
+		private CardInfoInterface? CardInfo_Ori = null;
 
 		/// <summary>
 		/// 선택된 이름
@@ -47,6 +77,9 @@ namespace NfcReaderAssists
 		/// </summary>
 		public virtual void Dispose()
 		{
+			this.DeviceInfo_Ori = null;
+			this.CardInfo_Ori = null;
+			this.ReaderName = string.Empty;
 		}
 
 		/// <summary>

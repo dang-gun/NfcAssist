@@ -49,7 +49,7 @@ namespace NfcReaderAssists
 		/// <returns></returns>
 		public byte[] GetStatus()
 		{
-			byte[] byteReturn = null;
+			byte[] byteReturn = new byte[0];
 
 			using (ISCardContext Context1
 						= ContextFactory.Instance.Establish(SCardScope.System))
@@ -78,7 +78,7 @@ namespace NfcReaderAssists
 		/// <returns></returns>
 		public byte[] CardAttributeGet(SCardAttribute typeCardAttribute)
 		{
-			byte[] byteReturn = null;
+			byte[] byteReturn = new byte[0];
 
 			using (ISCardContext Context1 
 						= ContextFactory.Instance.Establish(SCardScope.System))

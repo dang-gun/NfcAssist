@@ -6,15 +6,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\NfcAssistNet4\NfcAssistNet4.csproj" />
-  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="PCSC" Version="6.0.0" />
 		<PackageReference Include="PCSC.Iso7816" Version="6.0.0" />
 		<PackageReference Include="PCSC.Reactive" Version="6.0.0" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\NfcAssist\NfcAssist.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Update="CardInfo\CardInfo_Mifare1k.json">
