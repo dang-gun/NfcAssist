@@ -1,6 +1,6 @@
 ﻿namespace NfcAssistTest
 {
-	partial class Form1
+	partial class MainForm
 	{
 		/// <summary>
 		///  Required designer variable.
@@ -34,8 +34,6 @@
 			this.listLog = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-			this.btnGetData = new System.Windows.Forms.Button();
-			this.btnSetData = new System.Windows.Forms.Button();
 			this.txtUpdateBinary = new System.Windows.Forms.TextBox();
 			this.labInfo = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -60,6 +58,12 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.numericStartBlock = new System.Windows.Forms.NumericUpDown();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiReaderTransmit_GetData = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiReaderTransmit_SetData = new System.Windows.Forms.ToolStripMenuItem();
+			this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deviceCommandDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.cardInfoCreateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.devToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiDev_Test = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiDev_DeviceCmdJsonSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,7 +111,7 @@
 			this.listLog.HideSelection = false;
 			this.listLog.Location = new System.Drawing.Point(12, 247);
 			this.listLog.Name = "listLog";
-			this.listLog.Size = new System.Drawing.Size(692, 350);
+			this.listLog.Size = new System.Drawing.Size(692, 342);
 			this.listLog.TabIndex = 3;
 			this.listLog.UseCompatibleStateImageBehavior = false;
 			this.listLog.View = System.Windows.Forms.View.Details;
@@ -121,26 +125,6 @@
 			// 
 			this.columnHeader2.Text = "Contents";
 			this.columnHeader2.Width = 580;
-			// 
-			// btnGetData
-			// 
-			this.btnGetData.Location = new System.Drawing.Point(496, 281);
-			this.btnGetData.Name = "btnGetData";
-			this.btnGetData.Size = new System.Drawing.Size(160, 23);
-			this.btnGetData.TabIndex = 6;
-			this.btnGetData.Text = "Transmit - GetData";
-			this.btnGetData.UseVisualStyleBackColor = true;
-			this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
-			// 
-			// btnSetData
-			// 
-			this.btnSetData.Location = new System.Drawing.Point(496, 310);
-			this.btnSetData.Name = "btnSetData";
-			this.btnSetData.Size = new System.Drawing.Size(160, 23);
-			this.btnSetData.TabIndex = 7;
-			this.btnSetData.Text = "Transmit - SetData";
-			this.btnSetData.UseVisualStyleBackColor = true;
-			this.btnSetData.Click += new System.EventHandler(this.btnSetData_Click);
 			// 
 			// txtUpdateBinary
 			// 
@@ -382,12 +366,60 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem,
+            this.dataToolStripMenuItem,
             this.devToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(713, 24);
 			this.menuStrip1.TabIndex = 18;
 			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// testToolStripMenuItem
+			// 
+			this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiReaderTransmit_GetData,
+            this.tsmiReaderTransmit_SetData});
+			this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+			this.testToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
+			this.testToolStripMenuItem.Text = "Nfc Reader";
+			// 
+			// tsmiReaderTransmit_GetData
+			// 
+			this.tsmiReaderTransmit_GetData.Name = "tsmiReaderTransmit_GetData";
+			this.tsmiReaderTransmit_GetData.Size = new System.Drawing.Size(176, 22);
+			this.tsmiReaderTransmit_GetData.Text = "Transmit - GetData";
+			this.tsmiReaderTransmit_GetData.Click += new System.EventHandler(this.tsmiReaderTransmit_GetData_Click);
+			// 
+			// tsmiReaderTransmit_SetData
+			// 
+			this.tsmiReaderTransmit_SetData.Name = "tsmiReaderTransmit_SetData";
+			this.tsmiReaderTransmit_SetData.Size = new System.Drawing.Size(176, 22);
+			this.tsmiReaderTransmit_SetData.Text = "Transmit - SetData";
+			this.tsmiReaderTransmit_SetData.Click += new System.EventHandler(this.tsmiReaderTransmit_SetData_Click);
+			// 
+			// dataToolStripMenuItem
+			// 
+			this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deviceCommandDataToolStripMenuItem,
+            this.cardInfoCreateToolStripMenuItem});
+			this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+			this.dataToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.dataToolStripMenuItem.Text = "Data";
+			// 
+			// deviceCommandDataToolStripMenuItem
+			// 
+			this.deviceCommandDataToolStripMenuItem.Name = "deviceCommandDataToolStripMenuItem";
+			this.deviceCommandDataToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+			this.deviceCommandDataToolStripMenuItem.Text = "Device Command Create";
+			this.deviceCommandDataToolStripMenuItem.Click += new System.EventHandler(this.deviceCommandDataToolStripMenuItem_Click);
+			// 
+			// cardInfoCreateToolStripMenuItem
+			// 
+			this.cardInfoCreateToolStripMenuItem.Name = "cardInfoCreateToolStripMenuItem";
+			this.cardInfoCreateToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+			this.cardInfoCreateToolStripMenuItem.Text = "Card Info Create";
+			this.cardInfoCreateToolStripMenuItem.Click += new System.EventHandler(this.cardInfoCreateToolStripMenuItem_Click);
 			// 
 			// devToolStripMenuItem
 			// 
@@ -412,7 +444,7 @@
 			this.tsmiDev_DeviceCmdJsonSave.Text = "DeviceCommand Json Save";
 			this.tsmiDev_DeviceCmdJsonSave.Click += new System.EventHandler(this.tsmiDev_DeviceCmdJsonSave_Click);
 			// 
-			// Form1
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -420,16 +452,14 @@
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listviewCard);
 			this.Controls.Add(this.listviewDevice);
-			this.Controls.Add(this.btnGetData);
 			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.btnSetData);
 			this.Controls.Add(this.listLog);
 			this.Controls.Add(this.btnCardListRefresh);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboCardList);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
-			this.Name = "Form1";
+			this.Name = "MainForm";
 			this.Text = "Form1";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.numericBlockNumber)).EndInit();
@@ -454,8 +484,6 @@
 		private System.Windows.Forms.ListView listLog;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.Button btnGetData;
-		private System.Windows.Forms.Button btnSetData;
 		private System.Windows.Forms.Label labInfo;
 		private System.Windows.Forms.TextBox txtUpdateBinary;
 		private System.Windows.Forms.Label label2;
@@ -483,5 +511,11 @@
 		private System.Windows.Forms.ToolStripMenuItem devToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tsmiDev_Test;
 		private System.Windows.Forms.ToolStripMenuItem tsmiDev_DeviceCmdJsonSave;
+		private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deviceCommandDataToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem cardInfoCreateToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tsmiReaderTransmit_GetData;
+		private System.Windows.Forms.ToolStripMenuItem tsmiReaderTransmit_SetData;
 	}
 }

@@ -21,8 +21,18 @@ using System.Windows.Forms;
 
 namespace NfcAssistTest
 {
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
+		/// <summary>
+		/// 장치 명령 확인/생성 폼
+		/// </summary>
+		private DeviceCommandForm? frmDeviceCommand;
+		/// <summary>
+		/// 카드 인포 확인/생성 폼
+		/// </summary>
+		private CardInfoForm? frmCardInfo;
+		
+
 		/// <summary>
 		/// 디바이스와 카드정보를 이용하여 생성한 NFC 리더 지원 개체
 		/// </summary>
@@ -46,7 +56,7 @@ namespace NfcAssistTest
 		private List<DeviceCommandInterface> DeviceCommandList
 			= new List<DeviceCommandInterface>();
 
-		public Form1()
+		public MainForm()
 		{
 			InitializeComponent();
 
@@ -103,6 +113,19 @@ namespace NfcAssistTest
 			this.m_nfc.Dispose();
 			monitor.Cancel();
 			monitor.Dispose();
+
+			//열린 폼 닫기 및 제거
+			if (null != this.frmDeviceCommand)
+			{
+				this.frmDeviceCommand.Close();
+			}
+			this.frmDeviceCommand = null;
+
+			if (null != this.frmCardInfo)
+			{
+				this.frmCardInfo.Close();
+			}
+			this.frmCardInfo = null;
 		}
 
 		/// <summary>
@@ -593,65 +616,6 @@ namespace NfcAssistTest
 			}
 		}
 
-
-		/// <summary>
-		/// 리더기의 연결된 정보를 읽는다.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnGetData_Click(object sender, EventArgs e)
-		{
-			using (var context = ContextFactory.Instance.Establish(SCardScope.System))
-			{
-				using (var rfidReader = context.ConnectReader(
-											this.m_nfc.ReaderName
-											, SCardShareMode.Shared
-											, SCardProtocol.Any))
-				{
-					var apdu = new CommandApdu(IsoCase.Case2Short, rfidReader.Protocol)
-					{
-						CLA = 0xFF,
-						Instruction = InstructionCode.GetData,
-						P1 = 0x00,
-						P2 = 0x00,
-						Le = 0 // We don't know the ID tag size
-					};
-
-					using (rfidReader.Transaction(SCardReaderDisposition.Leave))
-					{
-						var sendPci = SCardPCI.GetPci(rfidReader.Protocol);
-						var receivePci = new SCardPCI(); // IO returned protocol control information.
-
-						var receiveBuffer = new byte[256];
-						var command = apdu.ToArray();
-
-						var bytesReceived = rfidReader.Transmit(
-							sendPci, // Protocol Control Information (T0, T1 or Raw)
-							command, // command APDU
-							command.Length,
-							receivePci, // returning Protocol Control Information
-							receiveBuffer,
-							receiveBuffer.Length); // data buffer
-
-						var responseApdu =
-							new ResponseApdu(receiveBuffer, bytesReceived, IsoCase.Case2Short, rfidReader.Protocol);
-
-						this.LogAdd(string.Format("SW1: {0:X2}, SW2: {1:X2}\n Uid: {2}"
-								, responseApdu.SW1,
-							responseApdu.SW2,
-							responseApdu.HasData
-								? BitConverter.ToString(responseApdu.GetData())
-								: "No uid received"));
-					}
-				}
-			}//end using context
-		}
-
-		private void btnSetData_Click(object sender, EventArgs e)
-		{
-
-		}
-
 		/// <summary>
 		/// 왼쪽부터 지정한 길이만큼 데이터를 가지고 온다.
 		/// <see href="https://github.com/dang-gun/DGUtility_DotNet/blob/main/DGU_ByteAssist/ByteArray.cs#L144">Get_Left</see>
@@ -758,5 +722,98 @@ namespace NfcAssistTest
 
 			nfcInfoFile.Test1(temp);
 		}
+
+		#region 메뉴 - Data
+		/// <summary>
+		/// Device Command Create
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void deviceCommandDataToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (null == this.frmDeviceCommand)
+			{
+				this.frmDeviceCommand = new DeviceCommandForm();
+			}
+
+			this.frmDeviceCommand.Show();
+		}
+
+		/// <summary>
+		/// Card Info Create
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void cardInfoCreateToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (null == this.frmCardInfo)
+			{
+				this.frmCardInfo = new CardInfoForm();
+			}
+
+			this.frmCardInfo.Show();
+		}
+		#endregion
+
+		#region 메뉴 - Nfc Reader
+
+		/// <summary>
+		/// 리더기의 연결된 정보를 읽는다.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void tsmiReaderTransmit_GetData_Click(object sender, EventArgs e)
+		{
+			using (var context = ContextFactory.Instance.Establish(SCardScope.System))
+			{
+				using (var rfidReader = context.ConnectReader(
+											this.m_nfc.ReaderName
+											, SCardShareMode.Shared
+											, SCardProtocol.Any))
+				{
+					var apdu = new CommandApdu(IsoCase.Case2Short, rfidReader.Protocol)
+					{
+						CLA = 0xFF,
+						Instruction = InstructionCode.GetData,
+						P1 = 0x00,
+						P2 = 0x00,
+						Le = 0 // We don't know the ID tag size
+					};
+
+					using (rfidReader.Transaction(SCardReaderDisposition.Leave))
+					{
+						var sendPci = SCardPCI.GetPci(rfidReader.Protocol);
+						var receivePci = new SCardPCI(); // IO returned protocol control information.
+
+						var receiveBuffer = new byte[256];
+						var command = apdu.ToArray();
+
+						var bytesReceived = rfidReader.Transmit(
+							sendPci, // Protocol Control Information (T0, T1 or Raw)
+							command, // command APDU
+							command.Length,
+							receivePci, // returning Protocol Control Information
+							receiveBuffer,
+							receiveBuffer.Length); // data buffer
+
+						var responseApdu =
+							new ResponseApdu(receiveBuffer, bytesReceived, IsoCase.Case2Short, rfidReader.Protocol);
+
+						this.LogAdd(string.Format("SW1: {0:X2}, SW2: {1:X2}\n Uid: {2}"
+								, responseApdu.SW1,
+							responseApdu.SW2,
+							responseApdu.HasData
+								? BitConverter.ToString(responseApdu.GetData())
+								: "No uid received"));
+					}
+				}
+			}//end using context
+		}
+
+		private void tsmiReaderTransmit_SetData_Click(object sender, EventArgs e)
+		{
+
+		}
+		#endregion
 	}
 }
