@@ -8,7 +8,7 @@
              d:DesignHeight="50" d:DesignWidth="800">
 	<StackPanel >
 		<Border Grid.ColumnSpan="10" Grid.RowSpan="10"
-				Margin="3" Padding="3"
+				Margin="3,0,3,0" Padding="3"
 				BorderThickness="1" BorderBrush="Coral">
 			<Grid Height="50" >
 				<Grid.ColumnDefinitions>
@@ -28,12 +28,13 @@
 						 Grid.Column="1" Grid.Row="0"
 						 IsReadOnly="True" HorizontalContentAlignment="Stretch" />
 
-				<Label x:Name="labStatus"
-					   Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
-
 				<Button x:Name="btnCopyClipboard" Content="Copy clipboard"
 						Grid.Column="2" Grid.Row="0" 
 						Click="btnCopyClipboard_Click" />
+
+
+				<Label x:Name="labStatus"
+					   Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5"/>
 			</Grid>
 		</Border>
 	</StackPanel>
