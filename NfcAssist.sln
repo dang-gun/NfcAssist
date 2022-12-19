@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfcAssistNet4", "NfcAssistN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfcAssistTest4", "NfcAssistTest4\NfcAssistTest4.csproj", "{4998FF27-6CC1-43FF-8B70-FD3CCEB22F68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfcReaderChecker", "NfcReaderChecker\NfcReaderChecker.csproj", "{F5A4FF16-B767-439A-88B3-70E3F1D601C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4998FF27-6CC1-43FF-8B70-FD3CCEB22F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4998FF27-6CC1-43FF-8B70-FD3CCEB22F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4998FF27-6CC1-43FF-8B70-FD3CCEB22F68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5A4FF16-B767-439A-88B3-70E3F1D601C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A4FF16-B767-439A-88B3-70E3F1D601C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A4FF16-B767-439A-88B3-70E3F1D601C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A4FF16-B767-439A-88B3-70E3F1D601C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

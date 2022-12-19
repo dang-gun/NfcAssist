@@ -61,12 +61,14 @@
 			this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiReaderTransmit_GetData = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiReaderTransmit_SetData = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiGetState = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deviceCommandDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cardInfoCreateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.devToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiDev_Test = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsmiDev_DeviceCmdJsonSave = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiDeviceInfo = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.numericBlockNumber)).BeginInit();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -379,7 +381,8 @@
 			// 
 			this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiReaderTransmit_GetData,
-            this.tsmiReaderTransmit_SetData});
+            this.tsmiReaderTransmit_SetData,
+            this.tsmiGetState});
 			this.testToolStripMenuItem.Name = "testToolStripMenuItem";
 			this.testToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
 			this.testToolStripMenuItem.Text = "Nfc Reader";
@@ -387,16 +390,23 @@
 			// tsmiReaderTransmit_GetData
 			// 
 			this.tsmiReaderTransmit_GetData.Name = "tsmiReaderTransmit_GetData";
-			this.tsmiReaderTransmit_GetData.Size = new System.Drawing.Size(176, 22);
+			this.tsmiReaderTransmit_GetData.Size = new System.Drawing.Size(180, 22);
 			this.tsmiReaderTransmit_GetData.Text = "Transmit - GetData";
 			this.tsmiReaderTransmit_GetData.Click += new System.EventHandler(this.tsmiReaderTransmit_GetData_Click);
 			// 
 			// tsmiReaderTransmit_SetData
 			// 
 			this.tsmiReaderTransmit_SetData.Name = "tsmiReaderTransmit_SetData";
-			this.tsmiReaderTransmit_SetData.Size = new System.Drawing.Size(176, 22);
+			this.tsmiReaderTransmit_SetData.Size = new System.Drawing.Size(180, 22);
 			this.tsmiReaderTransmit_SetData.Text = "Transmit - SetData";
 			this.tsmiReaderTransmit_SetData.Click += new System.EventHandler(this.tsmiReaderTransmit_SetData_Click);
+			// 
+			// tsmiGetState
+			// 
+			this.tsmiGetState.Name = "tsmiGetState";
+			this.tsmiGetState.Size = new System.Drawing.Size(180, 22);
+			this.tsmiGetState.Text = "Get State";
+			this.tsmiGetState.Click += new System.EventHandler(this.tsmiGetState_Click);
 			// 
 			// dataToolStripMenuItem
 			// 
@@ -425,7 +435,8 @@
 			// 
 			this.devToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiDev_Test,
-            this.tsmiDev_DeviceCmdJsonSave});
+            this.tsmiDev_DeviceCmdJsonSave,
+            this.tsmiDeviceInfo});
 			this.devToolStripMenuItem.Name = "devToolStripMenuItem";
 			this.devToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
 			this.devToolStripMenuItem.Text = "Dev";
@@ -443,6 +454,13 @@
 			this.tsmiDev_DeviceCmdJsonSave.Size = new System.Drawing.Size(223, 22);
 			this.tsmiDev_DeviceCmdJsonSave.Text = "DeviceCommand Json Save";
 			this.tsmiDev_DeviceCmdJsonSave.Click += new System.EventHandler(this.tsmiDev_DeviceCmdJsonSave_Click);
+			// 
+			// tsmiDeviceInfo
+			// 
+			this.tsmiDeviceInfo.Name = "tsmiDeviceInfo";
+			this.tsmiDeviceInfo.Size = new System.Drawing.Size(223, 22);
+			this.tsmiDeviceInfo.Text = "Device Info";
+			this.tsmiDeviceInfo.Click += new System.EventHandler(this.tsmiDeviceInfo_Click);
 			// 
 			// MainForm
 			// 
@@ -517,5 +535,7 @@
 		private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tsmiReaderTransmit_GetData;
 		private System.Windows.Forms.ToolStripMenuItem tsmiReaderTransmit_SetData;
+		private System.Windows.Forms.ToolStripMenuItem tsmiDeviceInfo;
+		private System.Windows.Forms.ToolStripMenuItem tsmiGetState;
 	}
 }

@@ -20,6 +20,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+using System.Management;
+
 namespace NfcAssistTest
 {
 	public partial class MainForm : Form
@@ -827,5 +830,105 @@ namespace NfcAssistTest
 
 		}
 		#endregion
+
+		private void tsmiDeviceInfo_Click(object sender, EventArgs e)
+		{
+		//ManagementObjectSearcher objSearcher 
+		//	= new ManagementObjectSearcher(
+		//		"Select * from Win32_PnPSignedDriver where ClassGuid = '{50dd5230-ba8a-11d1-bf5d-0000f805f530}'");
+
+		//https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors?redirectedfrom=MSDN
+		//			ManagementObjectSearcher objSearcher
+		//				= new ManagementObjectSearcher(
+		//					@"\root\cimv2",
+		//@"SELECT * FROM Win32_PnPEntity WHERE ClassGuid = '{50DD5230-BA8A-11D1-BF5D-0000F805F530}'");
+
+
+		//ManagementObjectSearcher objSearcher
+		//	= new ManagementObjectSearcher(
+		//		@"SELECT * FROM Win32_PnPSignedDriver WHERE DeviceName = 'ACR1252 1S CL Reader PICC'");
+
+		//https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors?redirectedfrom=MSDN
+			ManagementObjectSearcher objSearcher
+				= new ManagementObjectSearcher(
+					@"\root\cimv2",
+@"SELECT * FROM Win32_PnPEntity WHERE ClassGuid = '{50DD5230-BA8A-11D1-BF5D-0000F805F530}'");
+
+			ManagementObjectCollection objCollection = objSearcher.Get();
+			
+			foreach (ManagementObject obj in objCollection)
+			{
+				//string info = String.Format("Device='{0}',Manufacturer='{1}',DriverVersion='{2}', ClassGuid={3} "
+				//	, obj["DeviceName"], obj["Manufacturer"], obj["DriverVersion"], obj["ClassGuid"]);
+
+				if (obj != null)
+				{
+					if (obj["Caption"].ToString() == "ACR1252 1S CL Reader PICC")
+					{
+						string info = String.Format("ACR1252 DeviceID='{0}'", obj["DeviceID"]);
+						Debug.WriteLine(info);
+
+						foreach (var aaa in obj.Properties)
+						{
+
+
+
+							if (false == aaa.IsArray)
+							{
+								Debug.WriteLine(string.Format("{0} = {1}", aaa.Name, aaa.Value));
+							}
+							else if (null == aaa.Value)
+							{
+							}
+							else
+							{
+								foreach (string bbb in (string[])aaa.Value)
+								{
+									Debug.WriteLine(string.Format(" - {0}", bbb));
+								}
+							}
+						}
+
+
+						Debug.WriteLine("***************************");
+					}
+				}
+				
+			}
+		}
+
+		private void tsmiGetState_Click(object sender, EventArgs e)
+		{
+			using (var context = ContextFactory.Instance.Establish(SCardScope.System))
+			{
+				var readerNames = context.GetReaders();
+
+				
+
+				var readerStates = context.GetReaderStatus(readerNames);
+
+				foreach (var state in readerStates)
+				{
+					PrintReaderState(state);
+
+					// free system resources (required for each returned state)
+					state.Dispose();
+				}
+			}
+		}
+
+		private void PrintReaderState(SCardReaderState state)
+		{
+			Debug.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			var atr = BitConverter.ToString(state.Atr ?? new byte[0]);
+			Debug.WriteLine($"Reader: {state.ReaderName}\n" +
+							  $"CurrentState: {state.CurrentState}\n" +
+							  $"EventState: {state.EventState}\n" +
+							  $"CurrentStateValue: {state.CurrentStateValue}\n" +
+							  $"EventStateValue: {state.EventStateValue}\n" +
+							  $"UserData: {state.UserData}\n" +
+							  $"CardChangeEventCnt: {state.CardChangeEventCnt}\n" +
+							  $"ATR: {atr}");
+		}
 	}
 }

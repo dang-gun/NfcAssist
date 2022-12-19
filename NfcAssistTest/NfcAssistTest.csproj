@@ -10,6 +10,7 @@
 		<PackageReference Include="PCSC" Version="6.0.0" />
 		<PackageReference Include="PCSC.Iso7816" Version="6.0.0" />
 		<PackageReference Include="PCSC.Reactive" Version="6.0.0" />
+		<PackageReference Include="System.Management" Version="5.0.0" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
