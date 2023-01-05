@@ -33,21 +33,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PCSC, Version=4.2.0.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\PCSC.4.2.0\lib\net40\PCSC.dll</HintPath>
+    <Reference Include="PCSC, Version=6.1.3.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCSC.6.1.3\lib\netstandard2.0\PCSC.dll</HintPath>
     </Reference>
-    <Reference Include="PCSC.Iso7816, Version=4.2.0.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\PCSC.Iso7816.4.2.0\lib\net40\PCSC.Iso7816.dll</HintPath>
+    <Reference Include="PCSC.Iso7816, Version=6.1.3.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCSC.Iso7816.6.1.3\lib\netstandard2.0\PCSC.Iso7816.dll</HintPath>
     </Reference>
-    <Reference Include="PCSC.Reactive, Version=4.2.0.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\PCSC.Reactive.4.2.0\lib\net46\PCSC.Reactive.dll</HintPath>
+    <Reference Include="PCSC.Reactive, Version=6.1.3.0, Culture=neutral, PublicKeyToken=13b76e54a2ee80a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCSC.Reactive.6.1.3\lib\netstandard2.0\PCSC.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive, Version=4.4.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.4.4.1\lib\net46\System.Reactive.dll</HintPath>
+    <Reference Include="System.Reactive, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.5.0.0\lib\netstandard2.0\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -82,13 +82,14 @@
     <Compile Include="PcscSharpAssists\GeneralAuthenticate.cs" />
     <Compile Include="PcscSharpAssists\KeyStructure.cs" />
     <Compile Include="PcscSharpAssists\KeyType.cs" />
-    <Compile Include="PcscSharpAssists\NfcReaderList.cs" />
+    <Compile Include="PcscSharpAssists\NfcListInfo.cs" />
     <Compile Include="PcscSharpAssists\PcscSharpAssist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Content Include="ProjectFile\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

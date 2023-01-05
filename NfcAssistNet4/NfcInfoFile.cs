@@ -40,7 +40,9 @@ namespace NfcAssist
 				string[] listFilesDir =	Directory.GetFiles(sNfcCardInfoFolderDir);
 				foreach (string itemFile in listFilesDir)
 				{
+					Debug.WriteLine("파일 읽기 시도 : " + itemFile);
 					CardInfoInterface temp = this.FileLoad_CardInfo(itemFile);
+
 					if (null != temp)
 					{
 						listReturn.Add(temp);
