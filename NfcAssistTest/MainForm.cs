@@ -22,20 +22,12 @@ using System.Windows.Forms;
 
 
 using System.Management;
+using NfcAssistTest.Global;
 
 namespace NfcAssistTest
 {
 	public partial class MainForm : Form
 	{
-		/// <summary>
-		/// 장치 명령 확인/생성 폼
-		/// </summary>
-		private DeviceCommandForm? frmDeviceCommand;
-		/// <summary>
-		/// 카드 인포 확인/생성 폼
-		/// </summary>
-		private CardInfoForm? frmCardInfo;
-		
 
 		/// <summary>
 		/// 디바이스와 카드정보를 이용하여 생성한 NFC 리더 지원 개체
@@ -118,17 +110,17 @@ namespace NfcAssistTest
 			monitor.Dispose();
 
 			//열린 폼 닫기 및 제거
-			if (null != this.frmDeviceCommand)
+			if (null != GlobalStatic.DeviceCmdForm)
 			{
-				this.frmDeviceCommand.Close();
+                GlobalStatic.DeviceCmdForm.Close();
 			}
-			this.frmDeviceCommand = null;
+            GlobalStatic.DeviceCmdForm = null;
 
-			if (null != this.frmCardInfo)
+			if (null != GlobalStatic.CardInfoForm)
 			{
-				this.frmCardInfo.Close();
+                GlobalStatic.CardInfoForm.Close();
 			}
-			this.frmCardInfo = null;
+            GlobalStatic.CardInfoForm = null;
 		}
 
 		/// <summary>
@@ -746,12 +738,12 @@ namespace NfcAssistTest
 		/// <param name="e"></param>
 		private void deviceCommandDataToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (null == this.frmDeviceCommand)
+			if (null == GlobalStatic.DeviceCmdForm)
 			{
-				this.frmDeviceCommand = new DeviceCommandForm();
+                GlobalStatic.DeviceCmdForm = new DeviceCommandForm();
 			}
 
-			this.frmDeviceCommand.Show();
+            GlobalStatic.DeviceCmdForm.Show();
 		}
 
 		/// <summary>
@@ -761,12 +753,12 @@ namespace NfcAssistTest
 		/// <param name="e"></param>
 		private void cardInfoCreateToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (null == this.frmCardInfo)
+			if (null == GlobalStatic.CardInfoForm)
 			{
-				this.frmCardInfo = new CardInfoForm();
+                GlobalStatic.CardInfoForm = new CardInfoForm();
 			}
 
-			this.frmCardInfo.Show();
+            GlobalStatic.CardInfoForm.Show();
 		}
 		#endregion
 

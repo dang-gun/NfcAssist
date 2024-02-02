@@ -104,9 +104,7 @@
     <None Include="CardInfo\CardInfo_Mifare1k.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="DeviceCommand\DeviceCmd_ARC122U_Series.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="DeviceCommand\DeviceCmd_ACR122U_Series.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

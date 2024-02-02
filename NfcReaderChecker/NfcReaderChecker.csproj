@@ -18,7 +18,7 @@
     <None Update="CardInfo\CardInfo_Mifare1k.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="DeviceCommand\DeviceCmd_ARC122U_Series.json">
+    <None Update="DeviceCommand\DeviceCmd_ACR122U_Series.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
